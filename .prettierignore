@@ -1,0 +1,8 @@
+# enviroenmtn wali file me ko touch mat krna 
+*.env
+.env
+.env.*
+
+/.vscode
+/node_modules
+ ./dist

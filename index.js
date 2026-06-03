@@ -27,3 +27,11 @@
 // means:
 // When I run "npm run dev",
 // start my backend using nodemon so the server automatically restarts whenever I save code changes.
+
+// now -> check git status -> those file note pushed pushed it -> git add .->git commit -m "setup project files part 1"->git push
+
+// create folder in src->controllers(for functionality), db(database ka connection logic ke liye) , middlewares(koi code inbetween run karana hai toh ), models , routes, utils 
+
+// install prettier(why) -> eg ek team member semicolon use krta hai ek nhi jb github pe puch krnge toh ->bohot sare conflict aate hai
+// install by dev dependency -> npm i -D prettier
+// ->isme file  bnani hoti hai ->.prettierrc , .prettierignore
