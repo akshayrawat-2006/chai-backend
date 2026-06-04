@@ -16,6 +16,16 @@ dotenv.config({
 // 2nd Approach:- include dotenv
 connectDB()
 
+// async method (2nd app) ek promise bhi return krta hai
+.then(()=>{
+app.listen(process.env.PORT || 8000,()=>{ //is used to start the Express server and listen for incoming requests on port 8000 , after db connected
+   console.log(`Server is running on port ${process.env.PORT}`); 
+})
+}) 
+.catch((error)=>{
+  console.log("MONGODB connection failed !!!",error)
+})
+
 /* 1st approach :-
 import express from "express"
 const app = express()

@@ -35,3 +35,23 @@
 // install prettier(why) -> eg ek team member semicolon use krta hai ek nhi jb github pe puch krnge toh ->bohot sare conflict aate hai
 // install by dev dependency -> npm i -D prettier
 // ->isme file  bnani hoti hai ->.prettierrc , .prettierignore
+
+
+// LECTURE: 8
+// app.js me jao  -> then index.js me server connect karo using .then()
+
+// install cookie parser, cors ->app.use() is used when jb middleware/configuation setting krni hai 
+
+// middleware->jaise /instagram click kiya client ne phir response me "akshay" send kar diya ->aab jaise beech me kuch check karna ho eg:instagram login kar rkha hai ya nhi ->👉iss beech ki checking ko middleware khete hai
+// 👉 sirf(req,res) nhi blki 4 cheeje hoti hai ->(err,req,res,next) :next ek flag hai jisse middleware1 kheta hai mera kam ho gya aab agle middleware2 pe jao
+
+// db se bbat krne wale hai bar bar  -> db/index.js me connectDB wala func bar bar likhna hoga ->so kyon na ek utility file ban lu  -> asyncHandler.js
+// asyncHandler = reusable helper function      ->utils folder:used to store -> Common helper functions,Utility functions,Reusable code
+
+
+//make  ApiError file in utils ->APIs we also need:    HTTP Status Code
+                                                    // Success Flag
+                                                    // Custom Errors Array
+                                                    // Stack Trace      So instead of using normal Error, we create our own Error class.
+
+ // make we create ApiResponse for consistent successful responses. 
