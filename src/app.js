@@ -1,3 +1,5 @@
+// app.js= Application Configuration -> Application Entry Point
+
 import express from "express"
 import cors from "cors"
 import cookieParser from "cookie-parser" //Cookie-parser is Express middleware that reads cookies( Small data stored in the user's browser) from incoming requests and makes them available in req.cookies.

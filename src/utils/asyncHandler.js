@@ -1,3 +1,7 @@
+// Every controller needs:try-catch Repeatedly
+// by using this file -> No need to write:try-catch everywhere
+
+
 // USING PROMISE
 const asyncHandler = (requentHandler) => {
   return (req,res,next) =>{

@@ -37,7 +37,7 @@
 // ->isme file  bnani hoti hai ->.prettierrc , .prettierignore
 
 
-// LECTURE: 8
+// LECTURE: 9
 // app.js me jao  -> then index.js me server connect karo using .then()
 
 // install cookie parser, cors ->app.use() is used when jb middleware/configuation setting krni hai 
@@ -55,3 +55,53 @@
                                                     // Stack Trace      So instead of using normal Error, we create our own Error class.
 
  // make we create ApiResponse for consistent successful responses. 
+
+// 👉👉👉👉
+//  Client Request
+//       ↓
+// Middleware
+// (cors, cookieParser, auth)
+//       ↓
+// Route
+//       ↓
+// Controller
+// (asyncHandler wraps it)
+//       ↓
+// Database
+// (MongoDB)
+//       ↓
+// Success?
+//    /       \
+//  Yes        No
+//  ↓          ↓
+// ApiResponse ApiError
+//  ↓          ↓
+// Client receives response
+
+
+
+// LECTURE:10
+// models -> user.models.js ,video.model.js
+
+// 👉👉Login
+//   ↓
+// Access Token (15 min)
+// Refresh Token (7 days)
+//   ↓
+// Access Token Expires
+//   ↓
+// Send Refresh Token
+//   ↓
+// Server verifies
+//   ↓
+// Generate New Access Token
+//   ↓
+// Continue using app
+
+
+//Use special mongoose package ->
+// mongoose aggregate paginate : use in video file and below 2 in user file
+// bcrypt : used to hash passwords before storing them in the database.
+// jsonWbeToken(jwt) :JWT (JSON Web Token) is a secure token used for authentication, JWT 3 parts:Header(algo & tooken type).Payload(data).Signature
+
+// pre middleware ->runs before a specific Mongoose operation.

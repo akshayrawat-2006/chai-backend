@@ -1,3 +1,5 @@
+// 👉index.js contains Database Connection ,Server Start
+
 // db dusri jagah hai yaani ->time lgta hai ,db se baat krne me ->problem bhi aa skti hai 
 // SO use async , use error handling(try,catch,promise..)
 
