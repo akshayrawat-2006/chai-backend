@@ -228,7 +228,12 @@
 // user.router ,user.controller ko export kar do ->inko import karo mostly app.js(bec it is almost empty )
 
 // for api testing ->can use thunderClient(vs code pluggin),, 👉👉postman 
-// post man -> me collection pe jao ->plus pe click karo ->url http://localhost:8000/api/v1/users/register enter karo POST select karo -> then sned
+// post man -> me collection pe jao ->plus pe click karo ->url http://localhost:8000/api/v1/users/register enter karo POST select karo -> then send
+
+
+// 👉Lecture 14: Logic Building :ek problem ko choti problem me batke solve krna 
+// user.controllers.js->registerUser krne ke step socho 
+
 
 
 

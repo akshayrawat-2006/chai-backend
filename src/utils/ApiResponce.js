@@ -9,3 +9,5 @@ class ApiResponse {
         this.success = statusCode < 400 // bec 200 → Success,201 → Created,204 → Success All are:< 400 while >400 are errors
     }
 }
+
+export {ApiResponse} 

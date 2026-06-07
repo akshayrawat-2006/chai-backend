@@ -12,7 +12,7 @@ const userSchema = new Schema({
         index:true // make searching easy 
     },
     email:{
-         type:String,
+        type:String,
         required:true,
         unique:true,
         lowercase:true,
@@ -52,7 +52,7 @@ userSchema.pre("save",async function (next) { // next -> My work is finished aap
        return next()
     }
 
-    this.password  = bcrypt.hash(this.password,10)  //10 is salt rounds  -> Before hashing, bcrypt adds some random data (salt) to the password.
+    this.password  =await bcrypt.hash(this.password,10)  //10 is salt rounds  -> Before hashing, bcrypt adds some random data (salt) to the password.
      next()
     
 })

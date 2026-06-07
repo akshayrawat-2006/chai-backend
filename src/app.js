@@ -16,7 +16,7 @@ app.use(cors({
 // configure:-
 app.use(express.json({limit:"16kb"})) // json data ko accept karo 
  
-app.use(express.urlencoded({extended: true,limits:"16kb"}))  //extended -> obj ke andar obj bhi de skte hai
+app.use(express.urlencoded({extended: true,limit:"16kb"}))  //extended -> obj ke andar obj bhi de skte hai
 
 app.use(express.static("public")) //public folder -> use to store assets like favicon,img,pdf etc
 
