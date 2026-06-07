@@ -63,13 +63,14 @@ userSchema.methods.isPasswordCorrect = async function(password){
 }
 
 userSchema.methods.generateAccessToken = function(){
-  return jwt.sign({
+  return jwt.sign({  // return statment will give A long encoded JWT string. eg eyJhbGciOiJIUzI1NiIsInR5...
+    // this part is payload
         _id:this._id,
         email:this.email,
         username:this.username,
         fullname:this.fullname // this.fullname -> yeh db se aa rhi hai, fullname-> yeh payload ka naam/key hai 
     },
-    process.env.ACCESS_TOKEN_SECRET,
+    process.env.ACCESS_TOKEN_SECRET, // Used to sign the token.
     {
         expiresIn: process.env.ACCESS_TOKEN_EXPIRY
     }

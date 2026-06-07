@@ -20,7 +20,22 @@ app.use(express.urlencoded({extended: true,limits:"16kb"}))  //extended -> obj k
 
 app.use(express.static("public")) //public folder -> use to store assets like favicon,img,pdf etc
 
-app.use(cookieParser) //Express,for every request,run the cookie-parser middleware.
+app.use(cookieParser()) //Express,for every request,run the cookie-parser middleware.
+
+
+// routed import 
+import userRouter from "./routes/user.routes.js"
+
+
+// routed declaration 
+// app.get -> not working here bec router alag se aa rha hai ek hi jagah nhi hai->
+// so router ko lane ke liye middleware lana hoga 
+// app.use("/users",userRouter)
+
+// "https://localHost:3000/users" se userRouter(user.router.js) pe jayega ->vha pe routee mention hai ->phir "https://localHost:3000/users/register" pe jayega ->user.controllers me register method pe chle jayega
+
+//👉👉 for good practise define konsi api,version
+app.use("/api/v1/users",userRouter) //"https://localHost:3000/api/v1/register""
 
 
 export { app }

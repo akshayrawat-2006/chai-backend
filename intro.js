@@ -105,3 +105,130 @@
 // jsonWbeToken(jwt) :JWT (JSON Web Token) is a secure token used for authentication, JWT 3 parts:Header(algo & tooken type).Payload(data).Signature
 
 // pre middleware ->runs before a specific Mongoose operation.
+
+
+
+// LECTURE 11:
+//package: multer and express-fileupload are almost same-> we use multer
+
+// install cloudinday
+
+//👉 multer ke use se user se file lenge phir usse temporary apne local storage par rakh denge 
+// phir cloudinary ki madad se local storage se file lenge aur server par daal denge
+
+// utlits -> cloudnary.js
+
+// MAKE middleware using multer(Multer = File Upload Middleware) -> see on gpt 
+
+
+
+// LECTURE 12(HTTP ): protocol for communication b/w👉 Browser ↔ Server
+// HyperText Transfer Protocol(http) -> Browser             ->❌ Not secure. bec Anyone intercepting the network can read it.
+                                        // ↓
+                                        // Username: Akshay
+                                        // Password: 123456
+                                        // ↓
+                                        // Server
+
+//https ->hyperText Transfer Protocol Secure : Data is encrypted
+// Browser         ->Even if someone intercepts the data:ajd8s7d9a8sd7a9s... ->can't understand it hence ✅ Secure.
+//    ↓
+// Encrypted Data
+//    ↓
+// Server     
+
+// URI (Uniform Resource Identifier) is a generic identifier for a resource.
+// URL (Uniform Resource Locator) is a type of URI that specifies the location of a resource and how to access it.
+// URN (Uniform Resource Name) is a type of URI that uniquely identifies a resource by name without specifying its location.
+
+// http request bhej rhe ho toh sath me kuch information bhi bhejni pdti hai jaise file bhejto ho toh filename,filesize,filecreated when etc(👉this is metadata)
+//👉 HTTP Headers are key-value extra information (metadata) sent along with an HTTP Request or Response.
+// used for caching,authenication ,manage-state(is userloggedin?)
+
+// 👉2012 se phele X-preffix lgana hota tha
+
+// Types of headers(can many more):-
+// Request Headers : Sent by client → server.
+// Response Headers : Sent by server → client.
+// Representation Headers :describe how data is represented including its👉 format, encoding, and compression.
+// Payload(data) Headers : describe the payload (data) of the message
+
+
+// 👉 Most Common HTTP Headers
+// Accept:
+// Client server ko batata hai ki mujhe kis type ka response chahiye
+// Example:Accept: application/json
+
+// User-Agent:
+// Batata hai request kis application/browser/device se aayi hai
+// Example:User-Agent: Chrome/138.0.0
+
+// Authorization:
+// User ki identity verify karne ke liye token/credentials bhejte hain
+// Example:Authorization: Bearer JWT_TOKEN
+
+// Content-Type:
+// Request body ka format batata hai
+// Example:Content-Type: application/json
+// Content-Type: multipart/form-data (file upload)
+
+// Cookie:
+// Browser se server ko stored cookies bhejta hai
+// Example; Cookie: accessToken=abc123
+
+// Cache-Control:     (  👉Cache = Fast Temporary Memory)
+// Browser/proxy ko batata hai response cache karna hai ya nahi
+// Example:Cache-Control: no-cache
+// Cache-Control: max-age=3600
+
+// 👉Some headers which can be use in production based company :- 
+// CORS Headers:-
+// Access-Control-Allow-Origin -> Kon API access kar sakta hai
+// Access-Control-Allow-Credentials -> Cookies allow hain ya nahi
+// Access-Control-Allow-Methods -> Allowed HTTP methods
+
+// Security Headers:-
+// Cross-Origin-Embedder-Policy (COEP)-> Controls which external resources can be embedded
+// Cross-Origin-Opener-Policy (COOP) ->Isolates browser tabs/windows from other origins
+// Content-Security-Policy (CSP)->Controls allowed scripts, images, styles etc.
+// X-XSS-Protection -> Browser-level XSS protection
+
+
+//👉 HTTP Methods:- 
+// GET    → Get Data
+// POST   → Create Data
+// PUT    → Replace Entire Data
+// PATCH  → Update Some Data
+// DELETE → Delete Data
+
+// HEAD   → GET jaisa hi, but sirf headers return karta hai, body nahi.
+// OPTIONS→ Server se poochta hai ki kaunse methods allowed hain.
+// TRACE(loopback test:)  → Debug Request 
+
+// 👉HTTP Status Code:-
+// 1xx → Information
+// 2xx → Success
+// 3xx → Redirection
+// 4xx → Client Error
+// 5xx → Server Error
+
+//Standard some HTTP code :-Mostly used in MERN stack ( can be different acc to company )
+// 200 → Everything OK
+// 201 → Created
+// 400 → Client sent wrong data
+// 401 → Not logged in
+// 404 → Not found
+// 500 → Server crashed
+// 504 → Server too slow
+
+
+//👉 Lecture 13: Router and controlling with debugging 
+// controllers -> user.controllers.js -> make method 
+// now to run method make URL->jb URL hit hoga method run hoga  -> 👉 URL ke liye (sare routes ke liye routes folder bnaya hai  )
+// user.router ,user.controller ko export kar do ->inko import karo mostly app.js(bec it is almost empty )
+
+// for api testing ->can use thunderClient(vs code pluggin),, 👉👉postman 
+// post man -> me collection pe jao ->plus pe click karo ->url http://localhost:8000/api/v1/users/register enter karo POST select karo -> then sned
+
+
+
