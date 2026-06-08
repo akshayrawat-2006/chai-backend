@@ -20,7 +20,9 @@ import fs from "fs" // fs -> file sysytem
             })
 
             //file uploaded successfully 
-            console.log("file is uploaded on cloudinary :", responce.url);
+            // console.log("file is uploaded on cloudinary :", responce.url);
+            fs.unlinkSync(localFilePath) // file uploaded so remove it 
+
 
             return responce
             

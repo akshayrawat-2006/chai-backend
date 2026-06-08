@@ -43,7 +43,7 @@ if( // Advance approach for validation
 }
 
 
-const existedUser = User.findOne({ // checking user exist?
+const existedUser =await User.findOne({ // checking user exist?
     $or:[{username},{email}]     // 👉operator use by sign "$"
  })      
  
@@ -55,7 +55,12 @@ const existedUser = User.findOne({ // checking user exist?
 
 // 👉middleware add new fields in req ->multer middleware gives req.files
 const avatarLocalPath = req.files?.avatar[0]?.path         // avatar ki prop(size,jpeg ..etc) pheli wali le aao
-const coverImageLocalPath = req.files?.coverImage[0]?.path
+// const coverImageLocalPath = req.files?.coverImage[0]?.path 
+
+let coverImageLocalPath;
+if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length >0) {
+    coverImageLocalPath = req.files.coverImage[0].path ; 
+}
 
 if(!avatarLocalPath){
        throw new ApiError(400,"Avatar file is required")
@@ -63,7 +68,7 @@ if(!avatarLocalPath){
 
 
  const avatar = await uploadOnCloudinary(avatarLocalPath)      // upload on cloudinary take time -> so await
- const coverImage = await uploadOnCloudinary(coverImageLocalPath)
+ const coverImage = await uploadOnCloudinary(coverImageLocalPath) // if path nhi mil rha then cloudinary will retrun empty string 
 
  if(!avatar){
            throw new ApiError(400,"Avatar file is required")
@@ -79,7 +84,7 @@ if(!avatarLocalPath){
       username:username.toLowerCase()
  })    
 
- // mongodb har ek document ke sath ._id provide krta hai -> so yeah create hua hai ya nhi ID e pta chl jaeyga 
+ // mongodb har ek document ke sath ._id provide krta hai 👉BSON data mai -> so yeah create hua hai ya nhi ID e pta chl jaeyga 
  const createdUser = await User.findById(user._id).select( //👉👉select method me yeh likho jo chej nhi chaihye
   "-password -refreshToken"
  )

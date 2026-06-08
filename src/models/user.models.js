@@ -32,8 +32,9 @@ const userSchema = new Schema({
       type:String, // cloudnary URL 
     },
     watchHistory:{
-        type:Schema.Types.ObjectId,
-        ref:"Video"
+    type: [Schema.Types.ObjectId],
+    ref: "Video",
+    default: []
     },
     password:{
       type:String,
@@ -44,18 +45,27 @@ const userSchema = new Schema({
     }
 },{timestamps:true})
 
-userSchema.pre("save",async function (next) { // next -> My work is finished aap flag aage pass kar do
-    // do not use arrow func-> bec  "this." behaves differently" -> in arrow func They inherit this from the surrounding scope.
-    // but in normal func 👉"this." refers to Current document being saved
+// userSchema.pre("save",async function (next) { // next -> My work is finished aap flag aage pass kar do
+//     // do not use arrow func-> bec  "this." behaves differently" -> in arrow func They inherit this from the surrounding scope.
+//     // but in normal func 👉"this." refers to Current document being saved
 
-    if(!this.isModified("password")){
-       return next()
-    }
+//     if(!this.isModified("password")){
+//        return next()
+//     }
 
-    this.password  =await bcrypt.hash(this.password,10)  //10 is salt rounds  -> Before hashing, bcrypt adds some random data (salt) to the password.
-     next()
+//     this.password  =await bcrypt.hash(this.password,10)  //10 is salt rounds  -> Before hashing, bcrypt adds some random data (salt) to the password.
+//      next()
     
-})
+// })
+
+userSchema.pre("save", async function(){ //👉👉Moderen style :uses Promises.  , Old style:used callbacks. see difference at GPT
+// Don't use next() with async middleware.
+    if(!this.isModified("password"))
+        return;
+
+    this.password = await bcrypt.hash(this.password,10);
+});
+
 
 // 👉methods is used to add custom functions to every document of that model.
 userSchema.methods.isPasswordCorrect = async function(password){

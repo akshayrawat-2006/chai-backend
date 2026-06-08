@@ -235,5 +235,15 @@
 // user.controllers.js->registerUser krne ke step socho 
 
 
+// 👉Lecture 15: using postman for backend 
+// 
+// postman ->body ->form data bec json me file nhi bhej skte 
+
+// now when all thing done -> go to cloudinary.js -> file unlink the uploaded file 
+
+//postman -> colletion  -> make collection 
+// then set environemtn -> for not using http://localhost:8000/api/v1/ all time -> change noenvironetn at top to youtubechai
+
+
 
 
