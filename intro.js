@@ -245,5 +245,20 @@
 // then set environemtn -> for not using http://localhost:8000/api/v1/ all time -> change noenvironetn at top to youtubechai
 
 
+// 👉Lecture 16:Access Refresh,Middleware and cookies in Backend 
+
+// user.controllers.js -> login ka code likha 
+// phir logout-> ke liye auth.middleware.js -> route
+
+
+// 👉Lecture 17:Acces token and Refresh Token in backend 
+// user.controllers.js ->frontend ko yeh bolenge ki jab accesstoken expire ho jaye(401 req jaygi) toh code likho ki jb 401 req aaye-> tab dubara login karane ki bjay -> access token refresh kralo 
+// aab req ke andar refresh token bhi bheji hai phir uss refresh token ko aur jo db me refresh token hai usse compare karaya  ->if same then only give access token 
+
+// then go to user.routes.js
+
+
+
+
 
 

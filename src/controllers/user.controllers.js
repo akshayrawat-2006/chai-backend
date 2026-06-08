@@ -4,6 +4,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { User } from "../models/user.models.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponce.js";
+import Jwt  from "jsonwebtoken";
 
 //👉 making of controller method (Lecture 13)
 // const registerUser = asyncHandler( async (req,res) => {
@@ -101,6 +102,137 @@ return res.status(201).json(
 
 });
 
+const generateAccessAndRefreshTokens = async(userId) =>{
+try {
+   const user =  await User.findById(userId)
+  const accessToken = user.generateAccessToken() //  generateAccessToken, generateRefreshToken already defined in user.models.js
+  const refreshToken  = user.generateRefreshToken()
 
-export {registerUser} // register default nhi hai yani ->registerUser naam se hi import krna hoga 
+  user.refreshToken = refreshToken;
+  await user.save({validateBeforeSave:false}) // aise me aur bhi cheeje jaise password require tha woh error dete hai kyoki hmne sirf rereshToken ko add krke save kraya hai
+
+// idhar refreshToken,accesToken dono hai aur refreshToken db me save ho chuka hai so return
+return {accessToken,refreshToken}
+
+} catch (error) {
+    throw new ApiError(500,"Somethinf went wrong while generating refresh and access token")
+}
+}
+
+//👉 Lecture 16(loginUser):-
+const loginUser = asyncHandler(async(req,res) =>{
+    // req body se data le aao
+    // username or email 
+    // find the user 
+    //user already exist ->pass word check , is not exist -> then sign up 
+    // is password correct -> generate acces and refresh token 
+    // inn tokens ko bhej do (send to cookie)
+
+
+    const {email,username,password} = req.body;
+ 
+    //hmara login page me -> username aur email me se kisi se bhi login kra skte ho 
+
+    if(!(username || email)){ // username aur email dono nhi hai 
+      throw new ApiError(400,"username or email is requuired")
+    }
+
+    // ya toh email dhund do ya toh username dhund do  -> or operator
+    // db dusre continent mai -> so use await
+  const user = await User.findOne({// findOne -> jaise hi pheli enttry mil jaygi woh de dega
+     $or:[{username},{email}]
+   }) 
+
+   if(!user){
+      throw new ApiError(404,"user does not exist")
+   }
+
+   const isPasswordValid = await user.isPasswordCorrect(password) // isPasswordCorrect-> made in user.models.js
+
+ if(!isPasswordValid){
+      throw new ApiError(401,"Password Incorrect ,Invalid user credentials")
+   }
+
+// access and refresh token bar bar generate hote hai -> so ek different method bna lete hai -> to go top ->generateAccessAndRefreshTokens
+const {accessToken,refreshToken}= await generateAccessAndRefreshTokens(user._id)
+
+
+// yha pe refernce line140 wale user ka hai aur token ki call 155 me mari hai -> woh abhi empty hai
+// 1 way -> can update it , 2nd way -> ek aur db quiery mar do (if calling an db is not exprensive for you)
+const loggedInUser = await User.findById(user._id).select("-password -refreshToken") // pass,refresh ko mat bhejo
+
+const options ={// send cookies
+ httpOnly:true, // 👉aab cookies sirf server se modify hogi na ki frontent se
+ secure:false
+}    
+return res.status(200).cookie("accessToken",accessToken,options).cookie("refreshToken",refreshToken,options).json(
+    new ApiResponse(200,{user:loggedInUser,accessToken,refreshToken},"User LoggeIn successfully") //yeh ek achi practise hai ki dubara access aur refresh token bheje hai agr kisi vajah se logginUser me nhi aye hai toh 
+)
+ 
+})
+
+const logOutUser = asyncHandler(async(req,res) => {
+    // yha pe user._id kha se laye -> so create middleware ->auth.middlewares.js
+
+   await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set:{ //👉 ki kya kya update karna hai 
+                refreshToken:undefined,
+
+
+            }
+        },
+        {
+            new:true
+        }
+    )
+
+    const options ={
+    httpOnly:true,
+    secure:false
+}  
+return res.status(200).clearCookie("accessToken",options).clearCookie("refreshToken",options).json(new ApiResponse(200,{},"User logged Out"))
+})
+
+
+// 👉Lecture 17
+const refreshAccessToken= asyncHandler(async(req,res) =>{
+    const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken //👉Many mobile apps don't automatically use browser cookies. -> so using by req.body
+
+    if(!incomingRefreshToken){
+        throw new ApiError(401,"Unauthorized request")
+    }
+
+ try {
+      const decodedToken =  Jwt.verify(incomingRefreshToken,process.env.REFRESH_TOKEN_SECRET)
+   
+      const user = await User.findById(decodedToken?._id);
+       if(!user){
+           throw new ApiError(401,"Invalid Refresh Token ")
+       }
+   
+       // abb match krenge incommin token ko aur jo decodedtoken ko use krke user find kiya hai use pass jo token hai 
+       if(incomingRefreshToken !== user?.refreshToken){
+            throw new ApiError(401,"Refresh Token is expired or used")
+       }
+   
+       // means both are same so generate new access token =>cookies me bhejna hai toh options bhi rkhne honge 
+       const options ={
+           httpOnly:true,
+           secure:false
+       }
+   
+    const {accessToken,newRefreshToken} =  await generateAccessAndRefreshTokens(user._id);
+   
+      return res.status(200).cookie("accessToken",accessToken,options).cookie("refreshToken",newRefreshToken,options).json(new ApiResponse(200,{accessToken,refreshToken:newRefreshToken},"Access Token Refreshed "))
+ } catch (error) {
+    throw new ApiError(401,error?.message || "Invalid Refresh Token")
+ }
+
+})
+
+export {registerUser,
+    loginUser,logOutUser,refreshAccessToken
+} // register default nhi hai yani ->registerUser naam se hi import krna hoga 
 // agr register default hai toh naam change krke bhi import kar skte hai 
