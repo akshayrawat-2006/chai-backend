@@ -263,6 +263,7 @@
 //https://app.eraser.io/workspace/YtPqZ1VogxGy1jzIDkzj-> subscriptions ->chanel aur subscriber dono user hai 
 // models ->subscription.models.js
 
+// user.controllers.js
 
 
 

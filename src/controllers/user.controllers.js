@@ -232,7 +232,109 @@ const refreshAccessToken= asyncHandler(async(req,res) =>{
 
 })
 
+
+// 👉Lecture 18:
+const changeCurrentPassword = asyncHandler(async(req,res)=>{
+    const {oldPassword,newPassword} = req.body
+
+    // user chahiye hoga tabhi toh pass chnage kar paunga
+    // agr pass change krna hai -> to login toh hai hi ->aur login kaise ho payega kyoki middleware lga hai ->aur auth middleware chla hai toh ->req.user se user nikal skte hai 
+   const user = await User.findById( req.user?._id)
+
+ const isPasswordCorrect=  await user.isPasswordCorrect(oldPassword)
+ 
+ if(!isPasswordCorrect){
+    throw new ApiError(400,"Invalid old password")
+ }
+
+//  yani yha tak old password thik hai aab nya password set krna hai 
+       user.password = newPassword;
+await user.save({validateBeforeSave:false});
+
+return res.status(200).json(new ApiResponse(200,{},"Password change successfully"))
+
+})
+
+//👉 agr user login hai toh usse curr user asani se de skte hai ->bec of middleware
+const getCurrentUser =asyncHandler(async(req,res)=>{
+    return res.status(200).json(new ApiResponse(200,req.user,"current user fetched successfully"))
+}) 
+
+const updateAccountDetails = asyncHandler(async(req,res)=>{
+    const {fullname , email} =req.body;
+
+    if(!fullname || !email){
+        throw new ApiError(400,"All fields are required")
+    }
+
+  const user = await User.findByIdAndUpdate( req.user?._id,{
+    $set:{
+      fullname:fullname,
+      email:email
+  }
+},{new:true}).select("-password") // new :true se update hone ke baad jo info hai woh return hoti hai 
+
+return res.status.json(new ApiResponse(200,"Account detais updated successfully"))
+
+})
+
+// abb files update krni hai ->toh multer middleware ka use hoga taaki files accept kar pao , aur vhi update kar payenge jo login ho ->auth middleware
+const updateAvatar = asyncHandler(async(req,res)=>{
+    // multer -> req.files
+  const avatarLocalPath =req.file?.path
+
+  if(!avatarLocalPath){
+         throw new ApiError(400,"Avatar file is missing ")
+  }
+
+  const avatar = await uploadOnCloudinary(avatarLocalPath)
+
+  if(!avatar.url){
+      throw new ApiError(400,"Error while uploading on avatar ")
+  }
+
+  await User.findOneAndUpdate(
+    req.user?._id,
+    {
+     $set:{
+        avatar:avatar.url
+     }
+    },
+    {new : true}
+  ).select("-password")
+
+  return res.status(200).json(new ApiResponse(200,user,"Avatar is updated"))
+
+})
+
+const updateCoverImage = asyncHandler(async(req,res)=>{
+    // multer -> req.files
+  const coverImageLocalPath =req.file?.path
+
+  if(!coverImageLocalPath){
+         throw new ApiError(400,"cover image file is missing ")
+  }
+
+  const coverImage = await uploadOnCloudinary(coverImageLocalPath)
+
+  if(!coverImage.url){
+      throw new ApiError(400,"Error while uploading on cover Image ")
+  }
+
+ const user = await User.findOneAndUpdate(
+    req.user?._id,
+    {
+     $set:{
+        coverImage:coverImage.url
+     }
+    },
+    {new : true}
+  ).select("-password")
+})
+
+return res.status(200).json(new ApiResponse(200,user,"COver iMage is updated"))
+
 export {registerUser,
-    loginUser,logOutUser,refreshAccessToken
+    loginUser,logOutUser,refreshAccessToken,changeCurrentPassword,getCurrentUser,updateAccountDetails,updateAvatar,updateCoverImage
 } // register default nhi hai yani ->registerUser naam se hi import krna hoga 
 // agr register default hai toh naam change krke bhi import kar skte hai 
