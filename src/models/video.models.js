@@ -1,5 +1,5 @@
 import mongoose,{Schema} from "mongoose";
-import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
+import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2"; // yeh isi liye bec sare videos toh de ek page pe aa nhi skte so agle page pe load kara lo -> same with commennts
 
 const videoSchema = new Schema({
     videoFile:{

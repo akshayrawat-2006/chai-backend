@@ -301,6 +301,9 @@
 // 👉Lecture 23: MongoDb model for playlist and tweet 
 // testing routes in postman after which are made after logout
 
+// see model at eraser at line 1
+// then go to comment.models.js
+// then like
 
 
 
