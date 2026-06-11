@@ -266,6 +266,39 @@
 // user.controllers.js
 
 
+// 👉Lecture 19:Understansd the subscription Schema 
+// man lo jab subscribe kre toh array me add krte jaye -> phir total subsciber show krna aasan
+// but assumr subscriber 1 million hai ussme se kisine unscriber kara toh 1 million me dhund ke array me delete krna ->very expensive process
+// 👉So this approach is wrong
+
+// subscriber ek channel hi hai => dono ek channel hi hai but internally they both are user also -> for differentiate them we call them subscirber, channel
+
+//👉👉 har bar jo koi subscribe krega ek nya document bnega jisme uss subscribe aur channel ka naam hoga 
+// to find ki iss channelA ke andar kitne subsrciber hai -> find the no. of doucment which has 👉channelA
+
+// to find ki iss subsA ne kitne channel ko subscribe kiya hai -> subscriber =subsA daal do aur dekho then count no. of document
+
+//👉👉👉👉Lecture 20:Learn MOngoDB Aggregation Pipelines
+// subsriptions se jo information milti hai user ke andar bhi join krnege => LEFT JOIN 
+
+//👉 agr apke pass 100 documents hai ->kisi condtion ko lgake apne kha isse 50 kar do -> so jb hum next stage pe jaynge unn 50 pe hi operation hoga
+
+// user.controllers.js
+
+
+// 👉Lecture 21:How to write sub-pipelines and routes
+// watch History se look up karenge videos ki id mai toh->bohot sare video.model ki id le ayenge usse bohot sare document mile jayenge
+
+// See model -> analyse 
+// 👉👉ek loop up se watchHistory ke andar videos.models ki sari values mil jaygi ->lekin videos.models ke andar owner bhi toh yeh users se ayega so ek aur loopUp karna hoga owner se user.model ke andar
+// means nested LOOKUP karna hoga 
+
+
+
+
+
+
+
 
 
 

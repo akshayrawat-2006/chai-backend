@@ -5,6 +5,7 @@ import { User } from "../models/user.models.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponce.js";
 import Jwt  from "jsonwebtoken";
+import mongoose from "mongoose";
 
 //👉 making of controller method (Lecture 13)
 // const registerUser = asyncHandler( async (req,res) => {
@@ -303,6 +304,8 @@ const updateAvatar = asyncHandler(async(req,res)=>{
     {new : true}
   ).select("-password")
 
+//HW;-   👉Delete OLD avatar Url ALSO 
+
   return res.status(200).json(new ApiResponse(200,user,"Avatar is updated"))
 
 })
@@ -330,11 +333,160 @@ const updateCoverImage = asyncHandler(async(req,res)=>{
     },
     {new : true}
   ).select("-password")
+
+  return res.status(200).json(new ApiResponse(200,user,"COver iMage is updated"))
 })
 
-return res.status(200).json(new ApiResponse(200,user,"COver iMage is updated"))
+
+// 👉Lecture 20
+const getUserChannelProfile = asyncHandler(async(req,res)=>{
+
+    //jb channel ki profile chahiye toh uss channel ke url pe jate ho 
+   const {username}= req.params
+
+   if(!username?.trim()){
+   throw new ApiError(400,"Username is missing")
+   }
+
+ const channel= await User.aggregate([
+    {
+       $match:{ //Filter data.
+        username:username?.toLowerCase()
+       }
+     },
+    {  
+        $lookup:{//Used to join two collections.
+            from:"subsciptions", // Subsciption -> model me sari cheeje plural aur lower case me ho jati 
+            localField:"_id",   // Current collection field -> hmare yha pe kis nam se hai 
+            foreignField:"channel", // uske channel ko select krne se subsriber milenge(lecture 19)
+            as:"subscribers" //Store matched videos in a new field called subscribers
+        } 
+        
+    },
+    // yha tak mil gye ki kitne subscribers hai 
+    // aab nikalna hai ki maine kitne subscirbe kiye hai 
+    {
+    $lookup:{
+      from:"subsciptions", // 
+      localField:"_id",
+      foreignField:"subscriber",
+      as:"subscribedTo" // maine kisko subcribe kar rkha hai 
+   }
+    },
+    {
+        $addFields:{
+            subscribersCount:{
+                $size:"$subscribers" ,// $subscribers -> use dollar bec it is field
+            },
+            channelsSubscribedToCount:{
+                $size:"$subscribedTo"
+            },
+            isSubscribed:{ // agr true hai toh frontend ko message denge subscirbed wala button show ho else subscribe wala button show ho 
+                $cond:{
+                    // dekho ki jo document aaya hai subscribers ka usme mai hu ya nhi 
+
+                    // $in:[ value , (array or obj) ] ->Is this value present inside this array?
+                    if:{$in:[req.user?._id,"$subscribers.subscriber"]}, // in -> mtlb present hai ya nhi   , 
+                    then:true,
+                    else:true
+                }
+
+            }
+        }
+    },
+    {
+        $project:{   //Used to select fields.
+            fullname:1,
+            username:1,
+            subscribersCount:1,
+            channelsSubscribedToCount:1,
+            isSubscribed:1,
+            avatar:1,
+            coverImage:1,
+            email:1,
+
+
+        }
+    }
+
+])
+
+if(!channel?.length()){
+  throw new ApiError(400,"channel does not exists")
+}
+
+return res.status(200).json(new ApiResponse(200,channel[0],"User channel fetched successfully"))
+})
+
+
+const getWatchHistory = asyncHandler(async(req,res)=>{
+    //   req.user._id; //_id yha pe mongoDb ki id nhi blki ek string milti hai ->phir age khi use use krni ho toh mongoose usse mongoDb ki id me convert kar deta hai uss string ko 
+
+      const user = await User.aggregate([
+        {
+            $match:{
+                // _id:req.user._id -> WRONG bec yha pe mongoose kam nhi karta AGGREGAtion pipelline ka code directly jata hai
+                // So make mongoose object id 
+                _id:new mongoose.Types.ObjectId(req.user._id)
+            }
+        },
+        // yha tak user mil gya hai aab isski watch history ke andar jana hoga 
+        {
+            $lookup:{
+                from:"videos",     //Video ->plural = videos
+                localField:"watchHistory",
+                foreignField:"_id",
+                as:"watchHistory",
+                
+                // yha tak bohot sare document aa gye hai par unke andar owner nhi hai bec owner ek user hai -> so add subpipline:
+                pipeline:[
+                   {
+                    $lookup:{
+                        from:"users", // kha pe jana hai ->kha se cheeje lani hai
+                        localField:"owner",     // localfield ->videos ke andar se bec abhi videos mai hai 
+                       foreignField:"_id",
+                       as:"owner",
+
+                    //    yha tak owner ke andar bohot sari cheehe aa kyi hai -> jaise uska username,email,fullname,avatar,coverImage.. so yeh sari cheeje thodi na deni hai owner ke andar
+                    // so further pipeline to remove unnessary detail
+                    pipeline:[
+                        {
+                            $project:{
+                                 fullname:1,
+                                 username:1,
+                                 avatar:1
+                            }
+                        }
+                    ]
+                    }
+                   },
+                // 👉   sari fields aa jayngi but array ayega -> aur array mai se nikalna hoga first value => done this way in channel pipline ->usse owner milega jiske andar array hoga aur array ki 1st value me fullname,username,avatr mile jayega
+                //👉Another easy solution -> add further pipline
+                {
+                    $addFields:{
+                        owner:{ // field add bhi kar skte hai par hum owner ko overwrite hi kar dete hai
+                            $first:"$owner"   // array ki first value nikalni hai ->field me se nikalna hai so "$" then owner
+
+                        }
+                    }
+                }
+
+
+                ]
+                
+            } 
+        }
+      ])
+
+      return res.status(200).json(200,ApiResponse(user[0].watchHistory,"Watch History fetched Successfully "))
+})
+
+
+
+
+
 
 export {registerUser,
-    loginUser,logOutUser,refreshAccessToken,changeCurrentPassword,getCurrentUser,updateAccountDetails,updateAvatar,updateCoverImage
+    loginUser,logOutUser,refreshAccessToken,changeCurrentPassword,getCurrentUser,updateAccountDetails,updateAvatar,updateCoverImage,getUserChannelProfile,getWatchHistory
 } // register default nhi hai yani ->registerUser naam se hi import krna hoga 
 // agr register default hai toh naam change krke bhi import kar skte hai 
