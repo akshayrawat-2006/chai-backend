@@ -290,8 +290,11 @@
 // watch History se look up karenge videos ki id mai toh->bohot sare video.model ki id le ayenge usse bohot sare document mile jayenge
 
 // See model -> analyse 
-// 👉👉ek loop up se watchHistory ke andar videos.models ki sari values mil jaygi ->lekin videos.models ke andar owner bhi toh yeh users se ayega so ek aur loopUp karna hoga owner se user.model ke andar
+//user.controllers.js-> 👉👉ek loop up se watchHistory ke andar videos.models ki sari values mil jaygi ->lekin videos.models ke andar owner bhi toh yeh users se ayega so ek aur loopUp karna hoga owner se user.model ke andar
 // means nested LOOKUP karna hoga 
+
+// go to user.routes.js
+
 
 
 

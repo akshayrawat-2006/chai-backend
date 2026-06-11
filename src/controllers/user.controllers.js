@@ -418,7 +418,7 @@ if(!channel?.length()){
 return res.status(200).json(new ApiResponse(200,channel[0],"User channel fetched successfully"))
 })
 
-
+// 👉Lecture 21
 const getWatchHistory = asyncHandler(async(req,res)=>{
     //   req.user._id; //_id yha pe mongoDb ki id nhi blki ek string milti hai ->phir age khi use use krni ho toh mongoose usse mongoDb ki id me convert kar deta hai uss string ko 
 
@@ -480,6 +480,8 @@ const getWatchHistory = asyncHandler(async(req,res)=>{
 
       return res.status(200).json(200,ApiResponse(user[0].watchHistory,"Watch History fetched Successfully "))
 })
+
+
 
 
 
