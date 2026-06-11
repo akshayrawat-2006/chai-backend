@@ -296,6 +296,13 @@
 // go to user.routes.js
 
 
+// 👉Lecture 22: Summary of the backend 
+
+// 👉Lecture 23: MongoDb model for playlist and tweet 
+// testing routes in postman after which are made after logout
+
+
+
 
 
 

@@ -178,10 +178,9 @@ const logOutUser = asyncHandler(async(req,res) => {
    await User.findByIdAndUpdate(
         req.user._id,
         {
-            $set:{ //👉 ki kya kya update karna hai 
-                refreshToken:undefined,
-
-
+            // $set:{ //👉 ki kya kya update karna hai 
+            $unset:{
+                refreshToken:1, // this removed the field from document 
             }
         },
         {
@@ -199,7 +198,7 @@ return res.status(200).clearCookie("accessToken",options).clearCookie("refreshTo
 
 // 👉Lecture 17
 const refreshAccessToken= asyncHandler(async(req,res) =>{
-    const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken //👉Many mobile apps don't automatically use browser cookies. -> so using by req.body
+    const incomingRefreshToken = req.cookies?.refreshToken || req.body?.refreshToken //👉Many mobile apps don't automatically use browser cookies. -> so using by req.body
 
     if(!incomingRefreshToken){
         throw new ApiError(401,"Unauthorized request")
@@ -411,7 +410,7 @@ const getUserChannelProfile = asyncHandler(async(req,res)=>{
 
 ])
 
-if(!channel?.length()){
+if(!channel?.length){
   throw new ApiError(400,"channel does not exists")
 }
 
@@ -478,7 +477,7 @@ const getWatchHistory = asyncHandler(async(req,res)=>{
         }
       ])
 
-      return res.status(200).json(200,ApiResponse(user[0].watchHistory,"Watch History fetched Successfully "))
+      return res.status(200).json(new ApiResponse(200,user[0].watchHistory,"Watch History fetched Successfully "))
 })
 
 
