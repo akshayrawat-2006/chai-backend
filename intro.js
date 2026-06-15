@@ -303,7 +303,24 @@
 
 // see model at eraser at line 1
 // then go to comment.models.js
-// then like
+// then like,playlist,tweet
+
+
+// 👉Lecture 24:Build in Public and Open Source
+// user model->controller,routes done, now make for other model 
+// controllers -> comment.controllers.js , dashboard.controllers.js, healtcheck ,like , playlist , subscription , tweet ,user, video 
+
+// routes -> comment.routes.js , dasdboard.routes.js , healtcheck ,like , playlist , subscription , tweet ,user, video 
+
+// then import in app.js
+
+// CAN SEE ALL CODE OF THESE IN GITHUB OR CAN SEE LECTURE 24 for WHAT HAVE TO WRITTEN
+//👉👉 https://github.com/hiteshchoudhary/chai-backend/tree/main/src/controllers
+
+
+// 👉Lecture 25: Backend series Final Video 
+// Backend is not only this -> we can add more things like graphql,sequal db etc 
+// but we can make full stack application from this also 
 
 
 

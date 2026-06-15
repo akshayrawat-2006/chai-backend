@@ -7,7 +7,7 @@ import { ApiResponse } from "../utils/ApiResponce.js";
 import Jwt  from "jsonwebtoken";
 import mongoose from "mongoose";
 
-//👉 making of controller method (Lecture 13)
+//👉 making of controller method (Lecture 13) -> JUST FOR TESTING ROUTE
 // const registerUser = asyncHandler( async (req,res) => {
 //     res.status(200).json({ // return not used bec already sends the response to the client.
 //         message:"Ok"
@@ -59,7 +59,7 @@ const existedUser =await User.findOne({ // checking user exist?
 const avatarLocalPath = req.files?.avatar[0]?.path         // avatar ki prop(size,jpeg ..etc) pheli wali le aao
 // const coverImageLocalPath = req.files?.coverImage[0]?.path 
 
-let coverImageLocalPath;
+let coverImageLocalPath; // cover image not compulsory so check is given by client(postman)
 if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length >0) {
     coverImageLocalPath = req.files.coverImage[0].path ; 
 }
@@ -86,7 +86,7 @@ if(!avatarLocalPath){
       username:username.toLowerCase()
  })    
 
- // mongodb har ek document ke sath ._id provide krta hai 👉BSON data mai -> so yeah create hua hai ya nhi ID e pta chl jaeyga 
+ //👉👉mongodb har ek document ke sath ._id provide krta hai 👉BSON data mai -> so yeah create hua hai ya nhi ID e pta chl jaeyga 
  const createdUser = await User.findById(user._id).select( //👉👉select method me yeh likho jo chej nhi chaihye
   "-password -refreshToken"
  )
@@ -173,6 +173,7 @@ return res.status(200).cookie("accessToken",accessToken,options).cookie("refresh
 })
 
 const logOutUser = asyncHandler(async(req,res) => {
+    // logout krne ke liye user ki detail toh nhi mangege so 
     // yha pe user._id kha se laye -> so create middleware ->auth.middlewares.js
 
    await User.findByIdAndUpdate(
@@ -241,7 +242,7 @@ const changeCurrentPassword = asyncHandler(async(req,res)=>{
     // agr pass change krna hai -> to login toh hai hi ->aur login kaise ho payega kyoki middleware lga hai ->aur auth middleware chla hai toh ->req.user se user nikal skte hai 
    const user = await User.findById( req.user?._id)
 
- const isPasswordCorrect=  await user.isPasswordCorrect(oldPassword)
+ const isPasswordCorrect=  await user.isPasswordCorrect(oldPassword) //isPassword in models.js
  
  if(!isPasswordCorrect){
     throw new ApiError(400,"Invalid old password")
